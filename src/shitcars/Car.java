@@ -19,6 +19,7 @@ public class Car extends RigidBody{
     
     public Car(float x, float y, Shape shape) {
         super(x, y, shape);
+        wheels = new ArrayList();
     }
     
     public void addWheel(float x, float y, float radius){
@@ -39,6 +40,9 @@ public class Car extends RigidBody{
     @Override
     public void render(Graphics g){
         super.render(g);
+        for(WheelCollider w : wheels){
+            w.render(g);
+        }
     }
     
 }
