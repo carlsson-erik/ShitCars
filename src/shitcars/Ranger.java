@@ -27,7 +27,7 @@ public class Ranger extends Entity{
     
     @Override
     public void update(){
-        
+        super.update();
     }
     
     @Override

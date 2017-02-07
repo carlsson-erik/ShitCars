@@ -5,6 +5,8 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 
 
 
@@ -17,7 +19,7 @@ public class ShitCars extends BasicGame{
 
     public final String gameName = "First";
     private long lastTick;
-    private final long FTPS = 1;
+    private final long FTPS = 30;
     private Map map;
     
     public ShitCars(String gameName){
@@ -32,6 +34,7 @@ public class ShitCars extends BasicGame{
     
 	@Override
 	public void init(GameContainer gc) throws SlickException {
+            
 	}
 
 	@Override
@@ -48,7 +51,7 @@ public class ShitCars extends BasicGame{
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
-		g.drawString("Howdy!", 10, 10);
+		map.render(g);
 	}
         
         

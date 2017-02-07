@@ -7,6 +7,7 @@ package shitcars;
 
 import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -14,13 +15,22 @@ import org.newdawn.slick.Graphics;
  */
 public class Map {
     
-    public static final float GRAVITY = 9.82f;
+    public static final float GRAVITY = 0.1f;
     
     public static ArrayList<Entity> entitys;
+    private ArrayList<Car> cars;
     
     public Map(){
         entitys = new ArrayList();
-      
+        cars = new ArrayList();
+        cars.add(new Car(200,300,new Rectangle(0,0,100,100)));
+        cars.add(new Car(200,100,new Rectangle(0,0,100,100)));
+        cars.get(0).kinematic = true;
+        
+        for(Car c : cars){
+            entitys.add(c);
+        }
+        
     }
     
     public void update(){
@@ -31,7 +41,9 @@ public class Map {
     
     public void fixedUpdate(){
         for(Entity e : entitys){
+
             e.fixedUpdate();
+            
         }
     }
     

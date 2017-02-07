@@ -26,7 +26,9 @@ public class WheelCollider extends Entity{
     
     public void update(){
         if(enabled){
+            super.update();
             wheel.setLocation(x, y);
+            
         }
     }
     

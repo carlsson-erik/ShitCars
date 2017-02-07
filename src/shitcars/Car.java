@@ -6,6 +6,7 @@
 package shitcars;
 
 import java.util.ArrayList;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
 /**
@@ -18,12 +19,26 @@ public class Car extends RigidBody{
     
     public Car(float x, float y, Shape shape) {
         super(x, y, shape);
-        this.shape = shape;
     }
     
     public void addWheel(float x, float y, float radius){
         wheels.add(new WheelCollider(x,y,radius,this));
         
+    }
+    @Override
+    public void update(){
+        super.update();
+    }
+    
+    @Override
+    public void fixedUpdate(){
+        super.fixedUpdate();
+        
+    }
+    
+    @Override
+    public void render(Graphics g){
+        super.render(g);
     }
     
 }

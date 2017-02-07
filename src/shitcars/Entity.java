@@ -18,17 +18,12 @@ public abstract class Entity {
     protected boolean enabled;
 
     public Entity(float x, float y) {
-        this.x = x;
-        this.y = y;
+        localX = x;
+        localY = y;
+        enabled = true;
     }
 
     public void update() {
-        if (enabled) {
-
-        }
-    }
-
-    public void fixedUpdate() {
         if (enabled) {
             if (parent != null) {
                 x = localX + parent.x;
@@ -38,6 +33,10 @@ public abstract class Entity {
                 y = localY;
             }
         }
+    }
+
+    public void fixedUpdate() {
+
     }
 
     public void render(Graphics g) {
