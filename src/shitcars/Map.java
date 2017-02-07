@@ -6,7 +6,7 @@
 package shitcars;
 
 import java.util.ArrayList;
-import java.util.Random;
+import org.newdawn.slick.Graphics;
 
 /**
  *
@@ -14,11 +14,31 @@ import java.util.Random;
  */
 public class Map {
     
-    private ArrayList<Entity> entitys;
+    public static final float GRAVITY = 9.82f;
+    
+    public static ArrayList<Entity> entitys;
     
     public Map(){
         entitys = new ArrayList();
       
+    }
+    
+    public void update(){
+        for(Entity e : entitys){
+            e.update();
+        }
+    }
+    
+    public void fixedUpdate(){
+        for(Entity e : entitys){
+            e.fixedUpdate();
+        }
+    }
+    
+    public void render(Graphics g){
+        for(Entity e : entitys){
+            e.render(g);
+        }
     }
     
     

@@ -1,6 +1,5 @@
 package shitcars;
 
-import java.awt.geom.Point2D;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -17,9 +16,14 @@ import org.newdawn.slick.SlickException;
 public class ShitCars extends BasicGame{
 
     public final String gameName = "First";
+    private long lastTick;
+    private final long FTPS = 1;
+    private Map map;
     
     public ShitCars(String gameName){
         super(gameName);
+        lastTick = System.currentTimeMillis();
+        map = new Map();
     }
     
     
@@ -32,7 +36,14 @@ public class ShitCars extends BasicGame{
 
 	@Override
 	public void update(GameContainer gc, int i) throws SlickException {
-	
+            if(System.currentTimeMillis() > lastTick + 1000/FTPS){
+                
+                map.fixedUpdate();
+                
+                lastTick = System.currentTimeMillis();
+            }
+            
+	map.update();
         }
 
 	@Override
@@ -51,6 +62,7 @@ public class ShitCars extends BasicGame{
 			AppGameContainer appgc;
 			appgc = new AppGameContainer(new ShitCars("Shit Cars"));
 			appgc.setDisplayMode(640, 480, false);
+                        appgc.setTargetFrameRate(60);
 			appgc.start();
 		} catch (SlickException ex) {
 		

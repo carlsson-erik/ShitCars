@@ -11,36 +11,39 @@ import org.newdawn.slick.Graphics;
  *
  * @author carls
  */
-public class Entity {
-    
-    protected float localX,localY,x,y;
+public abstract class Entity {
+
+    protected float localX, localY, x, y;
     protected Entity parent;
-    
-    
-    public Entity(float x, float y){
+    protected boolean enabled;
+
+    public Entity(float x, float y) {
         this.x = x;
         this.y = y;
     }
-    
-    public void update(){
-        
-    }
-    
-    public void fixedUpdate(){
-        if(parent !=null){
-            x = localX + parent.x;
-            y = localY + parent.y;
-        }else{
-            x = localX;
-            y = localY;
+
+    public void update() {
+        if (enabled) {
+
         }
-        
     }
-    
-    public void render(Graphics g){
-        
+
+    public void fixedUpdate() {
+        if (enabled) {
+            if (parent != null) {
+                x = localX + parent.x;
+                y = localY + parent.y;
+            } else {
+                x = localX;
+                y = localY;
+            }
+        }
     }
+
+    public void render(Graphics g) {
+    if (enabled) {
     
-    
-    
+    }
+    }
+
 }
