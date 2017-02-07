@@ -9,6 +9,10 @@ package shitcars;
  *
  * @author carls
  */
-public class WheelCollider {
+public class WheelCollider extends Entity{
+
+    public WheelCollider(float x, float y) {
+        super(x, y);
+    }
     
 }
