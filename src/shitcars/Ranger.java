@@ -8,6 +8,7 @@ package shitcars;
 import java.util.ArrayList;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 /**
  *
@@ -15,14 +16,19 @@ import org.newdawn.slick.geom.Rectangle;
  */
 public class Ranger extends Entity {
 
-    private float length;
-    private Rectangle rect;
+    private float length, distance;
+
+    private Rectangle ray;
     private ArrayList<Entity> ignoreEntitys;
+    private float resolution;
 
     public Ranger(float x, float y, float length) {
         super(x, y);
         this.length = length;
-        rect = new Rectangle(x, y, 1, length);
+        resolution = 1;
+        distance = 0;
+        ignoreEntitys = new ArrayList();
+        ray = new Rectangle(x, y, 1, length);
     }
 
     @Override
@@ -33,22 +39,73 @@ public class Ranger extends Entity {
     @Override
     public void fixedUpdate() {
         if (enabled) {
-            rect.setLocation(x, y);
+            ray.setLocation(x, y);
+            
+             float distance = length;
             for (Entity e : Map.entitys) {
-                if (e.enabled) {
-                    if (!ignoreEntitys.contains(e)) {
+                if (e instanceof RigidBody) {
+                    if (e.enabled) {
                         
-                        
-                        
+                        if (!ignoreEntitys.contains(e)) {
+                            if (ray.intersects(((RigidBody) e).shape)) {
+                                float temp = checkDistance(((RigidBody) e).shape, 0);
+                                if(temp < distance){
+                                    distance = temp;
+                                    
+                                }
+                                
+
+                            }else if(ray.contains(((RigidBody)e).shape)){
+                            distance = 0;
+                        }
+                            
+                       }
                     }
                 }
             }
+            this.distance = distance;
+            
         }
     }
 
     @Override
     public void render(Graphics g) {
-        g.draw(rect);
+        g.draw(ray);
+    }
+
+    public float checkDistance(Shape s, int i) {
+        ray.setHeight(resolution * i);
+        if (!ray.intersects(s)) {
+            return checkDistance(s, i + 1);
+        } else {
+            ray.setHeight(length);
+            return resolution * i;
+        }
+    }
+    
+    public void ignoreEntity(Entity e){
+        ignoreEntitys.add(e);
+    }
+
+    /**
+     * @param length the length to set
+     */
+    public void setLength(float length) {
+        this.length = length;
+    }
+
+    /**
+     * @return the length
+     */
+    public float getLength() {
+        return length;
+    }
+
+    /**
+     * @return the distance
+     */
+    public float getDistance() {
+        return distance;
     }
 
 }

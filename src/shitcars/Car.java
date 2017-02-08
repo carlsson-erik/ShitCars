@@ -22,18 +22,32 @@ public class Car extends RigidBody{
         wheels = new ArrayList();
     }
     
-    public void addWheel(float x, float y, float radius){
-        wheels.add(new WheelCollider(x,y,radius,this));
+    public void addWheelCollider(WheelCollider wheel){
+        wheels.add(wheel);
+        wheels.get(wheels.size()-1).parent = (Entity)this;
+        
         
     }
     @Override
     public void update(){
         super.update();
+        for(WheelCollider w : wheels){
+            w.update();
+            
+        }
+        
     }
     
     @Override
     public void fixedUpdate(){
         super.fixedUpdate();
+        
+        for(WheelCollider w : wheels){
+            w.fixedUpdate();
+            velocity.y -= (w.force()/50 * (velocity.y + 5)/10);
+            System.out.println("Force: " + 2);
+        }
+        
         
     }
     
@@ -42,6 +56,7 @@ public class Car extends RigidBody{
         super.render(g);
         for(WheelCollider w : wheels){
             w.render(g);
+            
         }
     }
     

@@ -24,10 +24,20 @@ public class Map {
     public Map(){
         entitys = new ArrayList();
         cars = new ArrayList();
-        cars.add(new Car(200,300,new Rectangle(0,0,50,50)));
-        cars.add(new Car(200,100,new Rectangle(0,0,50,50)));
+        cars.add(new Car(230,200,new Rectangle(0,0,50,50)));
+        cars.get(0).addWheelCollider(new WheelCollider(25,40,20,100,cars.get(0)));
+        cars.add(new Car(230,300,new Rectangle(0,0,50,50)));
         cars.add(new Car(100,100,new Circle(0,0,20)));
+        cars.add(new Car(0,200,new Circle(0,0,20)));
+        cars.add(new Car(30,100,new Circle(0,0,20)));
         
+        
+        
+        for(int i = 0; i < 30 ; i++){
+            for(int n = 0; n < 50 ; n++){
+       //     cars.add(new Car(n*5,20 + i*5,new Rectangle(0,0,4,4)));
+        }
+        }
         generateMap();
         
         

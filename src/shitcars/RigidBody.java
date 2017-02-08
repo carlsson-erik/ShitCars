@@ -65,23 +65,29 @@ public abstract class RigidBody extends Entity {
 
     public void collide() {
         for (Entity e : Map.entitys) {
+            if(e.enabled){
             if (e instanceof RigidBody) {
                 if (e != this) {
                     shape.setX(x + velocity.x);
+                    ((RigidBody)e).shape.setX(((RigidBody)e).velocity.x + ((RigidBody)e).x);
                     if (shape.intersects(((RigidBody)e).shape)) {
                         shape.setX(x);
+                        ((RigidBody)e).shape.setX(((RigidBody)e).x);
                         velocity.x = 0;
                     }
                     shape.setY(y + velocity.y);
+                    ((RigidBody)e).shape.setY(((RigidBody)e).velocity.y + ((RigidBody)e).y);
                     if (shape.intersects(((RigidBody)e).shape)) {
                         shape.setY(y);
+                        ((RigidBody)e).shape.setX(((RigidBody)e).y);
                         velocity.y = 0;
                     }
                 }
             }
         }
+        }
     }
-    
+
     public void setKinematic(boolean k){
         kinematic = k;
     }
