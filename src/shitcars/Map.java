@@ -25,6 +25,7 @@ public class Map {
     float[] triangle1 = {0,0,-400,0,-400,-100};
     public static ArrayList<Entity> entitys;
     private ArrayList<Car> cars;
+    private int bestScore;
     
     public static float viewX,viewY;
     
@@ -54,7 +55,7 @@ public class Map {
     }
     
     public void generateMap(){
-       entitys.add(new Platform(0,400,new Rectangle(0,0,4000,20)));
+       entitys.add(new Platform(0,400,new Rectangle(0,0,40000,20)));
        entitys.add(new Platform(400,400,new Rectangle(0,0,400,20)));
         cars.add(new Car(300,300,new Polygon(triangle)));
         
@@ -69,6 +70,7 @@ public class Map {
         for(Car c : cars){
             if(c.x > firstCar.x){
                 firstCar = c;
+                bestScore = c.getScore();
             }
         }
         viewX = -firstCar.x + 300;
@@ -87,6 +89,7 @@ public class Map {
         for(Entity e : entitys){
             e.render(g);
         }
+        g.drawString("Best Score: " + bestScore, 50,50);
     }
 
     /**

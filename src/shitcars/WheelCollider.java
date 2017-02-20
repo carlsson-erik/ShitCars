@@ -52,7 +52,7 @@ public class WheelCollider extends Entity {
     }
 
     public void render(Graphics g) {
-        wheel.setLocation(x + Map.viewX, y + Map.viewY);
+        wheel.setLocation(x + Map.viewX - radius, y + Map.viewY + ranger.getDistance() - radius*2);
         g.draw(wheel);
         ranger.render(g);
     }

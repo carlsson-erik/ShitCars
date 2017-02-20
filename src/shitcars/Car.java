@@ -16,6 +16,7 @@ import org.newdawn.slick.geom.Shape;
 public class Car extends RigidBody{
 
     private ArrayList<WheelCollider> wheels;
+    private int score;
     
     public Car(float x, float y, Shape shape) {
         super(x, y, shape);
@@ -34,6 +35,9 @@ public class Car extends RigidBody{
         for(WheelCollider w : wheels){
             w.update();
             
+        }
+        if(x > score){
+            score = (int)x;
         }
         
     }
@@ -77,6 +81,13 @@ public class Car extends RigidBody{
      */
     public ArrayList<WheelCollider> getWheels() {
         return wheels;
+    }
+
+    /**
+     * @return the score
+     */
+    public int getScore() {
+        return score;
     }
     
 }
