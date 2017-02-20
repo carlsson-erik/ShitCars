@@ -26,8 +26,22 @@ public abstract class Entity {
     public void update() {
         if (enabled) {
             if (parent != null) {
-                x = localX + parent.x;
-                y = localY + parent.y;
+
+                if (parent instanceof RigidBody) {
+                    x = (float) (Math.cos(Math.toRadians(((RigidBody) parent).angle))) * (localX - ((RigidBody) parent).defaultShape.getCenterX()) + parent.x + ((RigidBody) parent).defaultShape.getCenterX();
+
+                    if ((localX - ((RigidBody) parent).defaultShape.getCenterX()) > 0) {
+                        y = (float) (Math.sin(Math.toRadians(((RigidBody) parent).angle))) * (localY - ((RigidBody) parent).defaultShape.getCenterY()) + parent.y + ((RigidBody) parent).defaultShape.getCenterY();
+                    } else {
+                        y = (float) (Math.sin(Math.toRadians(((RigidBody) parent).angle))) * -(localY - ((RigidBody) parent).defaultShape.getCenterY()) + parent.y + ((RigidBody) parent).defaultShape.getCenterY();
+                    }
+
+                } else {
+
+                    x = localX + parent.x;
+                    y = localY + parent.y;
+                }
+
             } else {
                 x = localX;
                 y = localY;
@@ -40,9 +54,9 @@ public abstract class Entity {
     }
 
     public void render(Graphics g) {
-    if (enabled) {
-    
-    }
+        if (enabled) {
+
+        }
     }
 
 }

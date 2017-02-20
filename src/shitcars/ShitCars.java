@@ -6,8 +6,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -41,19 +39,21 @@ public class ShitCars extends BasicGame {
         
         
         if (System.currentTimeMillis() > lastTick + 1000 / FTPS) {
+            WheelCollider w = map.getCars().get(0).getWheels().get(0);
         if(input.isKeyDown(Input.KEY_W)){
-            map.getCars().get(0).velocity.y += -1;
+            
+            map.getCars().get(0).velocity.y -= 1;
         }
         if(input.isKeyDown(Input.KEY_S)){
             map.getCars().get(0).velocity.y += 1;
             
         }
         if(input.isKeyDown(Input.KEY_A)){
-            map.getCars().get(0).velocity.x += -1;
+            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), -10,0);
             
         }
         if(input.isKeyDown(Input.KEY_D)){
-            map.getCars().get(0).velocity.x += 1;
+            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), 10,0);
             
         }
             map.fixedUpdate();

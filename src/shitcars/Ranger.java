@@ -21,6 +21,7 @@ public class Ranger extends Entity {
     private Rectangle ray;
     private ArrayList<Entity> ignoreEntitys;
     private float resolution;
+    private boolean hit;
 
     public Ranger(float x, float y, float length) {
         super(x, y);
@@ -64,12 +65,17 @@ public class Ranger extends Entity {
                 }
             }
             this.distance = distance;
-            
+            if(distance != length){
+                hit = true;
+            }else{
+                hit = false;
+            }
         }
     }
 
     @Override
     public void render(Graphics g) {
+        ray.setLocation(x + Map.viewX, y + Map.viewY);
         g.draw(ray);
     }
 
@@ -106,6 +112,13 @@ public class Ranger extends Entity {
      */
     public float getDistance() {
         return distance;
+    }
+
+    /**
+     * @return the hit
+     */
+    public boolean isHit() {
+        return hit;
     }
 
 }

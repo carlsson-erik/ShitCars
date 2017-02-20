@@ -42,10 +42,22 @@ public class Car extends RigidBody{
     public void fixedUpdate(){
         super.fixedUpdate();
         
+        boolean anyWheelGrounded = false;
         for(WheelCollider w : wheels){
             w.fixedUpdate();
-            velocity.y -= (w.force()/50 * (velocity.y + 5)/10);
-            System.out.println("Force: " + 2);
+            
+            if(w.isGrounded()){
+                anyWheelGrounded = true;
+            this.applyOffsetForce(w.x,w.y,(w.distance() * (velocity.y + 2)/3) * 8,90);
+            this.applyOffsetForce(w.x, w.y + w.distance(), -velocity.x*4,0);
+            this.applyOffsetForce(w.x,w.y + w.distance(),30,0);
+            }
+            
+            
+        }
+        if(anyWheelGrounded){
+            
+            velocity.x += Map.GRAVITY * Math.sin(Math.toRadians(angle));
         }
         
         
@@ -58,6 +70,13 @@ public class Car extends RigidBody{
             w.render(g);
             
         }
+    }
+
+    /**
+     * @return the wheels
+     */
+    public ArrayList<WheelCollider> getWheels() {
+        return wheels;
     }
     
 }

@@ -17,6 +17,8 @@ public class WheelCollider extends Entity {
     private Ranger ranger;
     private Circle wheel;
     private float radius;
+    private boolean grounded;
+    
     public WheelCollider(float x, float y, float radius, float length,Entity parent) {
         super(x, y);
 
@@ -25,6 +27,7 @@ public class WheelCollider extends Entity {
         ranger.setLength(length);
         ranger.ignoreEntity(this);
         ranger.ignoreEntity(parent);
+        grounded = false;
         this.radius = radius;
         wheel = new Circle(x + 100, y, radius);
     }
@@ -34,6 +37,11 @@ public class WheelCollider extends Entity {
             super.update();
             wheel.setLocation(x - radius, (float)(y + ranger.getDistance()-(radius*2)));
             ranger.update();
+            if(ranger.isHit()){
+                grounded = true;
+            }else{
+                grounded = false;
+            }
         }
     }
 
@@ -44,14 +52,17 @@ public class WheelCollider extends Entity {
     }
 
     public void render(Graphics g) {
+        wheel.setLocation(x + Map.viewX, y + Map.viewY);
         g.draw(wheel);
         ranger.render(g);
     }
 
-    public float force() {
-        
+    public float distance() {
+            if(grounded){
             return ranger.getLength() - ranger.getDistance();
-    
+            }else{
+                return 0;
+            }
     }
 
     /**
@@ -59,6 +70,13 @@ public class WheelCollider extends Entity {
      */
     public Ranger getRanger() {
         return ranger;
+    }
+
+    /**
+     * @return the grounded
+     */
+    public boolean isGrounded() {
+        return grounded;
     }
 
 }
