@@ -12,7 +12,6 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
-
 /**
  *
  * @author carls
@@ -21,57 +20,70 @@ public abstract class RigidBody extends Entity {
 
     protected Point2D.Float velocity;
     protected boolean collidable, kinematic;
-    protected Shape shape,defaultShape;
-    
-    protected float mass,angle,angVel;
+    protected Shape shape, defaultShape;
+    protected ArrayList<RigidBody> ignoreRigidBodys;
+
+    protected float mass, angle, angVel;
 
     public RigidBody(float x, float y, Shape shape) {
         super(x, y);
         this.shape = shape;
         defaultShape = shape;
         collidable = true;
+        ignoreRigidBodys = new ArrayList();
         kinematic = false;
         velocity = new Point2D.Float();
         velocity.x = 0;
         velocity.y = 0;
         angle = 0;
         mass = 100;
-            shape.setLocation(x, y);
-        
-            
+        shape.setLocation(x, y);
+
     }
 
     @Override
     public void update() {
         if (enabled) {
             super.update();
-            shape.setLocation(x, y);
             
+            
+                if (parent instanceof RigidBody) {
+                    x = (float) (Math.cos(Math.toRadians(((RigidBody) parent).angle))) * (localX - ((RigidBody) parent).defaultShape.getCenterX()) + parent.x + ((RigidBody) parent).defaultShape.getCenterX();
+
+                    if ((localX - ((RigidBody) parent).defaultShape.getCenterX()) > 0) {
+                        y = (float) (Math.sin(Math.toRadians(((RigidBody) parent).angle))) * (localY - ((RigidBody) parent).defaultShape.getCenterY()) + parent.y + ((RigidBody) parent).defaultShape.getCenterY();
+                    } else {
+                        y = (float) (Math.sin(Math.toRadians(((RigidBody) parent).angle))) * -(localY - ((RigidBody) parent).defaultShape.getCenterY()) + parent.y + ((RigidBody) parent).defaultShape.getCenterY();
+                    }
+
+                }
+
+            
+            
+            shape.setLocation(x, y);
+
         }
     }
 
     @Override
     public void fixedUpdate() {
         if (enabled) {
-            
-               
+
             if (!kinematic) {
-                if(parent == null){
-                velocity.y += Map.GRAVITY;// * Math.cos(Math.toRadians(angle));
-                
-                collide();
-                localX += velocity.x;
-                localY += velocity.y;
-                angle += angVel;
-                angVel *= Map.ANGULAR_DRAG;
-                
-                 shape = (Polygon)defaultShape.transform(Transform.createRotateTransform((float)Math.toRadians(angle), defaultShape.getCenterX(), defaultShape.getCenterY()));
-                    
+                if (parent == null) {
+                    velocity.y += Map.GRAVITY;// * Math.cos(Math.toRadians(angle));
+
+                    collide();
+                    localX += velocity.x;
+                    localY += velocity.y;
+                    angle += angVel;
+                    angVel *= Map.ANGULAR_DRAG;
+
+                    shape = (Polygon) defaultShape.transform(Transform.createRotateTransform((float) Math.toRadians(angle), defaultShape.getCenterX(), defaultShape.getCenterY()));
+
                 }
             }
-            
-            
-           
+
         }
     }
 
@@ -81,47 +93,49 @@ public abstract class RigidBody extends Entity {
         if (enabled) {
             shape.setLocation(Map.viewX + x, Map.viewY + y);
             g.draw(shape);
-            
+
         }
     }
-    
-    public void applyOffsetForce(float x, float y,float force,float angle){
+
+    public void applyOffsetForce(float x, float y, float force, float angle) {
         float velocity = force / mass;
-        float xVel = (float)Math.cos(Math.toRadians(angle)) * force/mass;
-        float yVel = (float)Math.sin(Math.toRadians(angle)) * force/mass;
-        
+        float xVel = (float) Math.cos(Math.toRadians(angle)) * force / mass;
+        float yVel = (float) Math.sin(Math.toRadians(angle)) * force / mass;
+
         angVel -= (x - (defaultShape.getCenterX() + this.x)) * yVel * Map.ANGULAR_FORCE;
-        
-         this.velocity.y -= yVel;
+
+        this.velocity.y -= yVel;
         this.velocity.x += xVel;
     }
 
     public void collide() {
         for (Entity e : Map.entitys) {
-            if(e.enabled){
-            if (e instanceof RigidBody) {
-                if (e != this) {
-                    shape.setX(x + velocity.x);
-                    ((RigidBody)e).shape.setX(((RigidBody)e).velocity.x + ((RigidBody)e).x);
-                    if (shape.intersects(((RigidBody)e).shape)) {
-                        shape.setX(x);
-                        ((RigidBody)e).shape.setX(((RigidBody)e).x);
-                        velocity.x = 0;
-                    }
-                    shape.setY(y + velocity.y);
-                    ((RigidBody)e).shape.setY(((RigidBody)e).velocity.y + ((RigidBody)e).y);
-                    if (shape.intersects(((RigidBody)e).shape)) {
-                        shape.setY(y);
-                        ((RigidBody)e).shape.setX(((RigidBody)e).y);
-                        velocity.y = 0;
+            if (e.enabled) {
+                if (!ignoreRigidBodys.contains(e)) {
+                    if (e instanceof RigidBody) {
+                        if (e != this) {
+                            shape.setX(x + velocity.x);
+                            ((RigidBody) e).shape.setX(((RigidBody) e).velocity.x + ((RigidBody) e).x);
+                            if (shape.intersects(((RigidBody) e).shape)) {
+                                shape.setX(x);
+                                ((RigidBody) e).shape.setX(((RigidBody) e).x);
+                                velocity.x = 0;
+                            }
+                            shape.setY(y + velocity.y);
+                            ((RigidBody) e).shape.setY(((RigidBody) e).velocity.y + ((RigidBody) e).y);
+                            if (shape.intersects(((RigidBody) e).shape)) {
+                                shape.setY(y);
+                                ((RigidBody) e).shape.setX(((RigidBody) e).y);
+                                velocity.y = 0;
+                            }
+                        }
                     }
                 }
             }
         }
-        }
     }
 
-    public void setKinematic(boolean k){
+    public void setKinematic(boolean k) {
         kinematic = k;
     }
 

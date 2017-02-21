@@ -49,11 +49,11 @@ public class ShitCars extends BasicGame {
             
         }
         if(input.isKeyDown(Input.KEY_A)){
-            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), -10,0);
+            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), -100,0);
             
         }
         if(input.isKeyDown(Input.KEY_D)){
-            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), 10,0);
+            map.getCars().get(0).applyOffsetForce(w.x,w.y + w.distance(), 100,0);
             
         }
             map.fixedUpdate();
